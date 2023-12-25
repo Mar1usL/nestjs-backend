@@ -1,26 +1,28 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { PrismaModule } from './prisma/prisma.module';
-import { PostModule } from './post/post.module';
+import { LoggerMiddleware } from './middleware/logger/logger.middleware';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
     imports: [
+        ConfigModule.forRoot({ isGlobal: true }),
         GraphQLModule.forRoot<ApolloDriverConfig>({
             driver: ApolloDriver,
-            typePaths: ['./**/*.graphql'],
-            definitions: {
-                path: join(process.cwd(), '/src/types/graphql.ts'),
-                outputAs: 'class',
-            },
+            autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+            sortSchema: true,
         }),
         PrismaModule,
-        PostModule,
+        AuthModule,
+        UserModule,
     ],
-    controllers: [AppController],
-    providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(LoggerMiddleware).forRoutes('/');
+    }
+}
