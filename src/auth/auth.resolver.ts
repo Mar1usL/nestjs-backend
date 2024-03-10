@@ -5,6 +5,7 @@ import { SignUpInput } from './dto/signup-input';
 import { SignResponse } from './dto/sign-response';
 import { SignInInput } from './dto/signin-input';
 import { Public } from './decorators/public.decorator';
+import { UserResponse } from './dto/user-response';
 
 @Resolver(() => Auth)
 export class AuthResolver {
@@ -22,7 +23,8 @@ export class AuthResolver {
         return this.authService.signIn(signInInput);
     }
 
-    @Query(() => Auth, { name: 'auth' })
+    @Public()
+    @Query(() => UserResponse, { name: 'findUserById' })
     findOne(@Args('id', { type: () => Int }) id: number) {
         return this.authService.findOne(id);
     }

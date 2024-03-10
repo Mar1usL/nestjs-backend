@@ -57,12 +57,18 @@ export class AuthService {
         return { accessToken, refreshToken, user };
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} auth`;
+    async findOne(id: number) {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                id,
+            },
+        });
+
+        return { user };
     }
 
     remove(id: number) {
-        return `This action removes a #${id} auth`;
+        return id;
     }
 
     async createTokens(userId: number, email: string) {

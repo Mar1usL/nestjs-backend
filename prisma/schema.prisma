@@ -20,3 +20,13 @@ model User {
   updatedAt DateTime @default(now())
 }
 
+model Property {
+  id Int @id @default(autoincrement())
+  title String 
+  price Int 
+  location String
+  numberOfGuests Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+

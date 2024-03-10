@@ -9,6 +9,7 @@ import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from './auth/guards/access-token.guard';
+import { PropertiesModule } from './features/properties/properties.module';
 
 @Module({
     imports: [
@@ -21,8 +22,11 @@ import { AccessTokenGuard } from './auth/guards/access-token.guard';
         PrismaModule,
         AuthModule,
         UserModule,
+        PropertiesModule,
     ],
-    providers: [{ provide: APP_GUARD, useClass: AccessTokenGuard }],
+    providers: [
+        /*{ provide: APP_GUARD, useClass: AccessTokenGuard }*/
+    ],
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
