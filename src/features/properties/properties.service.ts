@@ -24,8 +24,10 @@ export class PropertiesService {
         return createdProperty;
     }
 
-    findAll() {
-        return `This action returns all properties`;
+    async findAll() {
+        const properties = await this.prisma.property.findMany();
+
+        return properties;
     }
 
     findOne(id: number) {
